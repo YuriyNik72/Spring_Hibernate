@@ -12,9 +12,6 @@ public class ProductDAO {
     @Autowired
     private ProductRepository repository;
 
-//    public void saveOrUpdate (Product product){
-//        repository.save(product);
-//    }
 
     public Product findById (long id){
         return repository.findById(id).orElse(null);

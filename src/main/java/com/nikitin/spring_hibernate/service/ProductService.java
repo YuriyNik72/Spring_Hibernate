@@ -1,5 +1,6 @@
 package com.nikitin.spring_hibernate.service;
 
+import com.nikitin.spring_hibernate.dao.ProductDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.nikitin.spring_hibernate.entity.Product;
@@ -13,16 +14,21 @@ public class ProductService {
 
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductDAO dao;
 
-    public void addProduct(Product product){
-        productRepository.addNewProduct(product);
-    }
-    public Product getById(int id) {
-        return productRepository.getProductById(id);
+    public void saveOrUpdate(Product product){
+        dao.saveOrUpdate(product);
     }
 
-    public List<Product> getAll() {
-        return productRepository.getAllProduct();
+    public Product findById(long id) {
+        return dao.findById(id);
+    }
+
+    public List<Product> findAll() {
+        return dao.findAll();
+    }
+
+    public void deleteById(long id){
+        dao.deleteById(id);
     }
 }

@@ -21,7 +21,7 @@ public class ProductController {
     // Показать все продукты
     @RequestMapping("/")
     public String showAll(Model model){
-        model.addAttribute("products",service.getAll());
+        model.addAttribute("products",service.findAll());
         return "allProducts";
     }
 
@@ -34,30 +34,45 @@ public class ProductController {
     //  Добавить новый продукт используя объект из формы
     @RequestMapping(path = "/addProduct", method = POST)
     public String addProduct(@ModelAttribute Product product){
-        service.addProduct(product);
+        service.saveOrUpdate(product);
         return "redirect:/";
     }
 
     // Находит продукт с заданным идентификатором (как часть URL) и возвращает представление «результат» или «не найдено»
     @RequestMapping(path = "/product/{id}", method = GET)
-    public String showProductByURLId(Model model, @PathVariable(value = "id") int id) {
+    public String showProductByURLId(Model model, @PathVariable(value = "id") long id) {
         return findProduct(model, id);
     }
 
     //  Находит продукт с заданным идентификатором (как параметр получения) и возвращает представление «результат» или «не найдено»
-//  Вызов по форме
+    //  Вызов по форме
     @RequestMapping(path = "/findId", method = GET)
-    public String showProductById(Model model, @RequestParam int id) {
+    public String showProductByFormId(Model model, @RequestParam long id) {
         return findProduct(model, id);
     }
 
-    private String findProduct(Model model, int id){
-        Product p=service.getById(id);
+    private String findProduct(Model model, long id){
+        Product p=service.findById(id);
         if (p!=null){
             model.addAttribute("product", p);
             return "singleProduct";
         }
         model.addAttribute("id", id);
         return "not found";
+    }
+
+    // Показывает форму редактирования для продукта с заданным идентификатором
+    @RequestMapping(path = "/editProduct", method = GET)
+    public String editProduct(Model model, @RequestParam("id") long id){
+        Product p = service.findById(id);
+        model.addAttribute("product", p);
+        return "editProduct";
+    }
+
+    // Удаляет товар с заданным идентификатором
+    @RequestMapping(path = "/deleteProduct", method = GET)
+    public String deleteProduct(Model model, @RequestParam("id") long id){
+        service.deleteById(id);
+        return "redirect:/";
     }
 }

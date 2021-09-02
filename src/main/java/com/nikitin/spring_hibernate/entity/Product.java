@@ -1,16 +1,26 @@
 package com.nikitin.spring_hibernate.entity;
 
-public class Product {
-    private int id;
-    private String title;
-    private int cost;
-//    private String[] programmingLanguages;
 
-    public int getId() {
+import javax.persistence.*;
+
+@Entity(name = "product")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column
+    private String title;
+
+    @Column
+    private int price;
+
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -22,12 +32,12 @@ public class Product {
         this.title = title;
     }
 
-    public int getCost() {
-        return cost;
+    public int getPrice() {
+        return price;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
 }
