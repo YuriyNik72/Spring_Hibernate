@@ -1,10 +1,11 @@
 package com.nikitin.spring_hibernate.service;
 
-import com.nikitin.spring_hibernate.dao.ProductDAO;
 import com.nikitin.spring_hibernate.entity.Product;
+import com.nikitin.spring_hibernate.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,22 +13,39 @@ import java.util.List;
 public class ProductService {
 
 
+    private ProductRepository productRepository;
+
+
     @Autowired
-    private ProductDAO dao;
+   public Product saveOrUpdate(Product p){
+     return productRepository.save(p);
 
-    public void saveOrUpdate(Product product){
-        dao.saveOrUpdate(product);
     }
 
-    public Product findById(long id) {
-        return dao.findById(id);
-    }
 
     public List<Product> findAll() {
-        return dao.findAll();
+        return productRepository.findAll();
     }
 
-    public void deleteById(long id){
-        dao.deleteById(id);
+    public List<Product> findFilteredByPrice(String filter) {
+        List<Product> res;
+        switch (filter){
+            case "expMin" : res = productRepository.findByPriceAfter(productRepository.findMinPrice());
+            break;
+            case "chpMax" : res = productRepository.findByPriceBefore(productRepository.findMaxPrice());
+            break;
+            case "betwMinMax" : res=productRepository.findByPriceAfterAndPriceBefore(productRepository.findMinPrice(), productRepository.findMaxPrice());
+            break;
+            default: res = new ArrayList<>();
+        }
+        return res;
+    }
+
+    public Product findById(Long id) {
+        return productRepository.findById(id).orElseGet(null);
+    }
+
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
     }
 }
