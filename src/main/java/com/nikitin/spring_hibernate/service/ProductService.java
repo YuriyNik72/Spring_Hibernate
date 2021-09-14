@@ -2,7 +2,6 @@ package com.nikitin.spring_hibernate.service;
 
 import com.nikitin.spring_hibernate.entity.Product;
 import com.nikitin.spring_hibernate.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,8 +14,12 @@ public class ProductService {
 
     private ProductRepository productRepository;
 
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
-    @Autowired
+
+    //    @Autowired
    public Product saveOrUpdate(Product p){
      return productRepository.save(p);
 
